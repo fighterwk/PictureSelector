@@ -68,4 +68,13 @@
         android:textColor="@color/white"
         android:textSize="11sp"
         android:visibility="gone" />
+
+    <View
+        android:id="@+id/vi_mark"
+        android:visibility="gone"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CC000000"
+        />
 </com.luck.picture.lib.widget.SquareRelativeLayout>

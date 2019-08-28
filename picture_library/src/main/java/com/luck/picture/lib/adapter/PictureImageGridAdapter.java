@@ -46,6 +46,8 @@ import java.util.List;
  */
 public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final static int DURATION = 450;
+    private final static int MAX_DURATION = 5 * 60 * 1000;
+    private final static int MIN_DURATION = 3000;
     private Context context;
     private boolean showCamera;
     private OnPhotoSelectChangedListener imageSelectChangedListener;
@@ -178,6 +180,18 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
                 contentHolder.tv_duration.setVisibility(mediaMimeType == PictureConfig.TYPE_VIDEO
                         ? View.VISIBLE : View.GONE);
             }
+
+            if (mediaMimeType == PictureConfig.TYPE_VIDEO) {
+                if (image.getDuration() < MIN_DURATION || image.getDuration() > MAX_DURATION) {
+                    // 视频小于3秒， 大于5分钟的视频不可选择
+                    contentHolder.ll_check.setVisibility(View.INVISIBLE);
+                    contentHolder.markView.setVisibility(View.VISIBLE);
+                }else{
+                    contentHolder.ll_check.setVisibility(View.VISIBLE);
+                    contentHolder.markView.setVisibility(View.GONE);
+                }
+            }
+
             boolean eqLongImg = PictureMimeType.isLongImg(image);
             contentHolder.tv_long_chart.setVisibility(eqLongImg ? View.VISIBLE : View.GONE);
             long duration = image.getDuration();
@@ -267,12 +281,13 @@ public class PictureImageGridAdapter extends RecyclerView.Adapter<RecyclerView.V
         ImageView iv_picture;
         TextView check;
         TextView tv_duration, tv_isGif, tv_long_chart;
-        View contentView;
+        View contentView, markView;
         LinearLayout ll_check;
 
         public ViewHolder(View itemView) {
             super(itemView);
             contentView = itemView;
+            markView = itemView.findViewById(R.id.vi_mark);
             iv_picture = (ImageView) itemView.findViewById(R.id.iv_picture);
             check = (TextView) itemView.findViewById(R.id.check);
             ll_check = (LinearLayout) itemView.findViewById(R.id.ll_check);
